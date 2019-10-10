@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <import type="android.view.View"/>
+        <variable name="listner" type="com.nor.magicbox.activities.menu.MenuListener"/>
+        <variable name="result" type="java.lang.String"/>
+    </data>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:orientation="vertical"
+                  android:layout_width="match_parent"
+                  android:gravity="center"
+                  android:padding="16dp"
+                  android:layout_height="match_parent">
+        <EditText
+                android:id="@+id/edt_player_name"
+                android:hint="Player name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        <Button
+                android:onClick="@{v -> listner.onStartGame()}"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        <TextView
+                android:text="@{result}"
+                android:gravity="center"
+                android:textSize="24sp"
+                android:visibility="@{result == null ? View.GONE : View.VISIBLE}"
+                android:textColor="@color/colorAccent"
+                android:layout_marginTop="32dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+    </LinearLayout>
+</layout>
