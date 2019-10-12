@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="viewModel"
+            type="com.team.veza.googlenew.viewmodel.NewsViewModel" />
+    </data>
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".view.MainActivity">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_90sdp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <androidx.appcompat.widget.Toolbar
+                        android:id="@+id/toolbar"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_45sdp"
+                        app:collapseIcon="@drawable/ic_arrow_back_white_24dp"
+                        app:menu="@menu/menu_toolbar"
+                        app:title="@string/filter_news"
+                        app:titleTextColor="@color/white" />
+
+                    <com.google.android.material.tabs.TabLayout
+                        app:tabTextColor="@color/divider_color"
+                        app:tabSelectedTextColor="@color/white"
+                        android:id="@+id/tl_category"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/toolbar" />
+                </RelativeLayout>
+            </com.google.android.material.appbar.AppBarLayout>
+
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/vp_category"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+            <RelativeLayout
+                android:visibility="@{viewModel.isShowLoading==true?View.VISIBLE:View.GONE}"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <include
+                    layout="@layout/layout_loading"/>
+            </RelativeLayout>
+
+
+    </RelativeLayout>
+</layout>

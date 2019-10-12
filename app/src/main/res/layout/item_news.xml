@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="news"
+            type="com.team.veza.googlenew.model.News" />
+        <variable
+            name="listener"
+            type="com.team.veza.googlenew.adapter.NewsAdapter.INewsActionListener" />
+    </data>
+    <LinearLayout xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="vertical"
+        android:layout_marginBottom="@dimen/_4sdp"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_size">
+        <androidx.cardview.widget.CardView
+            android:clickable="true"
+            android:id="@+id/cv_news"
+            android:onClick="@{(v)->listener.onClickItem(v,news)}"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/item_size"
+            android:focusable="true">
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/item_size">
+                <ImageView
+                    app:url='@{news.urlToImage==null?"":news.urlToImage}'
+                    android:layout_marginEnd="@dimen/_4sdp"
+                    android:scaleType="fitXY"
+                    android:id="@+id/img_news"
+                    android:layout_width="@dimen/item_size"
+                    android:layout_height="match_parent"
+                    tools:ignore="ContentDescription" />
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <TextView
+                        android:text="@{news.title}"
+                        android:singleLine="true"
+                        android:gravity="center_vertical"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/_15ssp"
+                        android:textColor="@color/title_news"
+                        android:ellipsize="end"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"/>
+                    <TextView
+                        android:text="@{news.description}"
+                        android:gravity="center_vertical"
+                        android:maxLines="2"
+                        android:textSize="@dimen/_12ssp"
+                        android:textColor="@color/black"
+                        android:ellipsize="end"
+                        android:layout_weight="1"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"/>
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+</layout>
