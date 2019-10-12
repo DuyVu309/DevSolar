@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Lọc tin tức</string>
+    <string name="title_search">Search</string>
+    <string name="error_key_search_empty">Please enter key search!</string>
+    <string name="loading">Loading …</string>
+    <string name="item_popup_like">Yêu thích</string>
+    <string name="item_popup_delete">Xóa</string>
+    <string name="error_get_data">An error occurred! Please check your connection!</string>
+</resources>
