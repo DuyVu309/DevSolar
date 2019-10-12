@@ -21,7 +21,6 @@ abstract class BaseFragment : Fragment() {
     }
 
     fun setOnBackPressed(onBackAlternative: (() -> Unit)?) {
-        Log.e("HVV1312","Ok set ne")
         (activity as MainActivity).onBackPressAlternative = onBackAlternative
     }
 

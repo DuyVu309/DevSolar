@@ -1,8 +1,5 @@
 package com.example.filternew.ui.news
 
-import android.util.Log
-import android.view.View
-import android.widget.AdapterView
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,13 +10,13 @@ import com.example.filternew.data.model.NewsResponse
 import com.example.filternew.data.network.NewsRespository
 import kotlinx.coroutines.launch
 
-class NewsViewModel(private val respository: NewsRespository) : ViewModel() {
+class NewsViewModel(private val newsRespository: NewsRespository) : ViewModel() {
 
     var refreshing = MutableLiveData<Boolean>()
 
     var news = MutableLiveData<NewsResponse>()
 
-    var article = MutableLiveData<ArrayList<Article>>()
+    var article = MutableLiveData<List<Article>>()
 
     var newsInitialized = MutableLiveData<Boolean>()
 
@@ -29,9 +26,9 @@ class NewsViewModel(private val respository: NewsRespository) : ViewModel() {
 
     fun getNews() {
         launch({
-            news.value = respository.refreshSpecifyNews(tag)
+            news.value = newsRespository.refreshSpecifyNews(tag)
             if(news.value!=null){
-                article.value = news.value!!.articles as ArrayList<Article>?
+                article.value = news.value!!.articles
             }
             newsInitialized.value = true
         }, {
@@ -39,10 +36,10 @@ class NewsViewModel(private val respository: NewsRespository) : ViewModel() {
         })
     }
 
-    fun refreshNews() {
+    private fun refreshNews() {
         refreshing.value = true
         launch({
-            news.value = respository.refreshSpecifyNews(tag)
+            news.value = newsRespository.refreshSpecifyNews(tag)
             refreshing.value = false
             newsInitialized.value = true
         }, {
@@ -55,11 +52,7 @@ class NewsViewModel(private val respository: NewsRespository) : ViewModel() {
         refreshNews()
     }
 
-    fun onRecyclerViewItemClick(parent: AdapterView<*>, view: View, position:Int, id:Long){
-        when{
-
-        }
-    }
+    fun getArticle() = newsRespository.getArticles()
 
     private fun launch(block: suspend () -> Unit, error: suspend (Throwable) -> Unit) =
         viewModelScope.launch {

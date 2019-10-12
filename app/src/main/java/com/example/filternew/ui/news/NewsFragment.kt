@@ -3,6 +3,7 @@ package com.example.filternew.ui.news
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.appcompat.view.ContextThemeWrapper
@@ -13,12 +14,14 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.filternew.BaseFragment
 
 import com.example.filternew.R
+import com.example.filternew.data.dao.NewsDB
 import com.example.filternew.data.model.Article
 import com.example.filternew.databinding.FragmentNewsBinding
 import com.example.filternew.ui.read.ReadFragment
 import com.example.filternew.utils.Const
 import com.example.filternew.utils.IOnNewsClickListener
 import com.example.filternew.utils.InjectorUtil
+import org.jetbrains.anko.doAsync
 
 /**
  * A simple [Fragment] subclass.
@@ -43,7 +46,14 @@ class NewsFragment : BaseFragment(), IOnNewsClickListener {
         article: Article,
         itemView: View, position: Int
     ) {
-        showPopupMenu(itemView, article, position)
+        if(page == Const.KEY_NEWS_FRAGMENT){
+            doAsync {
+                NewsDB.getInstance(context!!).articleDao().insertArticle(article)
+                Log.e("HVV1312"," doasync")
+            }
+        }else {
+            showPopupMenu(itemView, article, position)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,9 +71,21 @@ class NewsFragment : BaseFragment(), IOnNewsClickListener {
         adapter = ArticesAdapter()
         adapter.setListener(this)
         binding.adt = adapter
-        viewModel.article.observe(this, Observer {
-            adapter.setArticleList(it)
-        })
+        if(page == Const.KEY_NEWS_FRAGMENT) {
+            viewModel.article.observe(this, Observer {
+                adapter.setArticleList(it)
+            })
+        }else if(page == Const.KEY_SAVES_FRAGMENT){
+            //doAsync {
+                Log.e("HVV1312","doAsync")
+                viewModel.getArticle().observe(viewLifecycleOwner, Observer {
+                    Log.e("HVV1312","${it.size}")
+                    adapter.setArticleList(it)
+                })
+            //}
+        }else{
+
+        }
         return binding.root
     }
 
@@ -89,9 +111,6 @@ class NewsFragment : BaseFragment(), IOnNewsClickListener {
         val wrapper = ContextThemeWrapper(context, R.style.PopupMenu)
         popupMenu = PopupMenu(wrapper, view)
         when (page) {
-            Const.KEY_NEWS_FRAGMENT -> {
-                return
-            }
             Const.KEY_SAVES_FRAGMENT -> {
                 popupMenu?.inflate(R.menu.menu_option)
             }

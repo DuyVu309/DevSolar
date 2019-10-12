@@ -1,6 +1,5 @@
 package com.example.filternew.ui.news
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -32,20 +31,22 @@ class ArticesAdapter : RecyclerView.Adapter<ArticesAdapter.ItemArticleBindingHol
     }
 
     override fun onBindViewHolder(itemArticleBindingHolder: ItemArticleBindingHolder, position: Int) {
-        val artice = artices[itemArticleBindingHolder.adapterPosition]
-        itemArticleBindingHolder.bind(artice)
+        val article = artices[itemArticleBindingHolder.adapterPosition]
+        itemArticleBindingHolder.bind(article)
         itemArticleBindingHolder.itemBinding.listener = listener
         itemArticleBindingHolder.itemView.setOnLongClickListener {
-            listener?.newLongClicked(artice,itemArticleBindingHolder.ivNews,itemArticleBindingHolder.adapterPosition)
+            listener?.newLongClicked(article,itemArticleBindingHolder.ivNews,itemArticleBindingHolder.adapterPosition)
             true
         }
 
     }
 
-    fun setArticleList(list:ArrayList<Article>){
-        this.artices = list
+    fun setArticleList(list:List<Article>){
+        this.artices = list as ArrayList<Article>
         notifyDataSetChanged()
     }
+
+
 
     fun setListener(listener:IOnNewsClickListener){
         this.listener = listener
@@ -57,7 +58,6 @@ class ArticesAdapter : RecyclerView.Adapter<ArticesAdapter.ItemArticleBindingHol
                 itemBinding.article = article
                 itemBinding.executePendingBindings()
             }
-
     }
 
 
