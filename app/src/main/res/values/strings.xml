@@ -6,4 +6,5 @@
     <string name="item_popup_like">Yêu thích</string>
     <string name="item_popup_delete">Xóa</string>
     <string name="error_get_data">An error occurred! Please check your connection!</string>
+    <string name="no_item_to_show">Không có bài viết nào để hiển thị...</string>
 </resources>

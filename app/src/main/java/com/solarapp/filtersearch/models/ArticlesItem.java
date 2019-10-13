@@ -6,9 +6,10 @@ import androidx.databinding.BindingAdapter;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.solarapp.filtersearch.R;
 import com.solarapp.filtersearch.utils.DateUtils;
 
-public class Response{
+public class ArticlesItem {
 	private String publishedAt;
 	private String author;
 	private String urlToImage;
@@ -23,7 +24,6 @@ public class Response{
 	}
 
 	public String getPublishedAt(){
-
 		return DateUtils.formatDate(publishedAt);
 	}
 
@@ -83,27 +83,27 @@ public class Response{
 		return content;
 	}
 
+    @BindingAdapter("profileImage")
+    public static void loadImage(ImageView view, String imageUrl) {
+        Glide.with(view.getContext())
+                .load(imageUrl)
+                .apply(new RequestOptions().centerCrop())
+                .placeholder(R.drawable.ic_loading)
+                .into(view);
+    }
+
 	@Override
  	public String toString(){
-		return 
-			"Response{" + 
-			"publishedAt = '" + publishedAt + '\'' + 
-			",author = '" + author + '\'' + 
-			",urlToImage = '" + urlToImage + '\'' + 
-			",description = '" + description + '\'' + 
-			",source = '" + source + '\'' + 
-			",title = '" + title + '\'' + 
-			",url = '" + url + '\'' + 
-			",content = '" + content + '\'' + 
+        return
+                "ArticlesItem{" +
+                        "publishedAt = '" + publishedAt + '\'' +
+                        ",author = '" + author + '\'' +
+                        ",urlToImage = '" + urlToImage + '\'' +
+                        ",description = '" + description + '\'' +
+                        ",source = '" + source + '\'' +
+                        ",title = '" + title + '\'' +
+                        ",url = '" + url + '\'' +
+                        ",content = '" + content + '\'' +
 			"}";
 		}
-
-	@BindingAdapter("profileImage")
-	public static void loadImage(ImageView view, String imageUrl) {
-		Glide.with(view.getContext())
-				.load(imageUrl).apply(new RequestOptions().centerCrop())
-				.into(view);
-	}
-
-
 }

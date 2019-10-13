@@ -1,10 +1,8 @@
 package com.solarapp.filtersearch.interfaces;
 
-import android.view.View;
-
-import com.solarapp.filtersearch.models.Response;
+import com.solarapp.filtersearch.models.ArticlesItem;
 
 public interface IItemNewsAdapterListener {
-    void onClickNewsListener(Response data);
+    void onClickNewsListener(ArticlesItem data);
 
 }

@@ -1,15 +1,12 @@
 package com.solarapp.filtersearch.interfaces;
 
-import com.solarapp.filtersearch.API.ParamApi;
-import com.solarapp.filtersearch.models.Response;
-
-import java.util.List;
+import com.solarapp.filtersearch.models.SearchResult;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
-import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface GetDataService {
-    @GET("?q={key_search}&amp;language=[language to search]&amp;apiKey=" + ParamApi.KEY_API)
-    Call<List<Response>> getSearchResult(@Path(value = "key_search", encoded = true) String key_search);
+    @GET("everything")
+    Call<SearchResult> getSearchResult(@Query("q") String query, @Query("language") String language, @Query("apiKey") String key);
 }
