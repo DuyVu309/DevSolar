@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="popupModel"
+            type="com.example.duyvd1.utils.popup.PopupListItem" />
+    </data>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/root_popup"
+        android:layout_width="@dimen/common_100dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_favorite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_spinner_selection"
+            android:onClick="@{popupModel::addToListFavotire}"
+            android:paddingLeft="@dimen/common_20dp"
+            android:paddingTop="@dimen/common_10dp"
+            android:paddingRight="@dimen/common_20dp"
+            android:paddingBottom="@dimen/common_10dp"
+            android:text="@string/favorite"
+            android:visibility="@{popupModel.mIsTabFavorite ? View.GONE : View.VISIBLE}" />
+
+        <View
+            android:layout_width="match_parent"
+            android:visibility="@{popupModel.mIsTabFavorite ? View.GONE : View.VISIBLE}"
+            android:layout_height="@dimen/common_1dp"
+            android:background="@color/common_divider" />
+
+        <TextView
+            android:id="@+id/tv_delete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_spinner_selection"
+            android:onClick="@{popupModel.mIsTabFavorite ? popupModel::deleteFromListFavorite : popupModel::deleteFromListSaved}"
+            android:paddingLeft="@dimen/common_20dp"
+            android:paddingTop="@dimen/common_10dp"
+            android:paddingRight="@dimen/common_20dp"
+            android:paddingBottom="@dimen/common_10dp"
+            android:text="@string/delete" />
+    </LinearLayout>
+</layout>

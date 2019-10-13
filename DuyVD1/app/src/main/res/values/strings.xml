@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">DuyVD1</string>
+
+    <!--Main-->
+    <string name="tintuc">Tin Tức</string>
+    <string name="daluu">Đã Lưu</string>
+    <string name="yeuthich">Yêu Thích</string>
+    <string name="loading">Loading ...</string>
+    <string name="title">Title</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
+    <string name="do_you_want_to_save_this_articles_to_device">Do you want to save this articles to your device</string>
+    <string name="favorite">Favorite</string>
+    <string name="delete">Delete</string>
+    <string name="loc_tin_tuc">Lọc Tin Tức</string>
+    <string name="Search">Search</string>
+    <string name="permision_denied">Permission Denied</string>
+
+</resources>
