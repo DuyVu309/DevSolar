@@ -1,10 +1,7 @@
 package com.example.filternew.data.dao
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.example.filternew.data.model.Article
 
 @Dao
@@ -18,4 +15,9 @@ interface ArticleDao {
 
     @Query("DELETE FROM article_table")
     fun deleteAll()
+
+    @Delete
+    fun deteleItem(article: Article)
+
+
 }

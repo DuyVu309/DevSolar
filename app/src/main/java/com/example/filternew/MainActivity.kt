@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity(),OnFragmentInteractListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        viewModel = ViewModelProviders.of(this, InjectorUtil.getSpecifyNewsFactory())
+        viewModel = ViewModelProviders.of(this, InjectorUtil.getSpecifyNewsFactory(this))
             .get(NewsViewModel::class.java)
         setSupportActionBar(toolbar)
         setupViewPager()

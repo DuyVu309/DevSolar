@@ -10,4 +10,6 @@
     <string name="empty_news">Không có bài viết nào để hiển thị</string>
     <string name="favorite">Yêu thích</string>
     <string name="remove">Xóa</string>
+    <string name="e_insert">Cannot insert</string>
+    <string name="e_delete">Cannot delete</string>
 </resources>

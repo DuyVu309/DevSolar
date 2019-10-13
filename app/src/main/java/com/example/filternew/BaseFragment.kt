@@ -10,7 +10,7 @@ abstract class BaseFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        setOnBackPressed(null) // Add this
+        setOnBackPressed(null)
     }
 
     override fun onAttach(context: Context) {

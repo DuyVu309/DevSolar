@@ -3,8 +3,8 @@ package com.example.filternew.ui.news
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.appcompat.widget.PopupMenu
@@ -14,24 +14,27 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.filternew.BaseFragment
 
 import com.example.filternew.R
-import com.example.filternew.data.dao.NewsDB
 import com.example.filternew.data.model.Article
 import com.example.filternew.databinding.FragmentNewsBinding
 import com.example.filternew.ui.read.ReadFragment
 import com.example.filternew.utils.Const
 import com.example.filternew.utils.IOnNewsClickListener
 import com.example.filternew.utils.InjectorUtil
-import org.jetbrains.anko.doAsync
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlin.coroutines.CoroutineContext
 
 /**
  * A simple [Fragment] subclass.
  */
-class NewsFragment : BaseFragment(), IOnNewsClickListener {
+class NewsFragment : BaseFragment(), IOnNewsClickListener,CoroutineScope {
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Default
 
     private val viewModel by lazy {
         ViewModelProviders.of(
             activity!!,
-            InjectorUtil.getSpecifyNewsFactory()
+            InjectorUtil.getSpecifyNewsFactory(context!!)
         ).get(NewsViewModel::class.java)
     }
     private var page = Const.KEY_NEWS_FRAGMENT
@@ -46,13 +49,17 @@ class NewsFragment : BaseFragment(), IOnNewsClickListener {
         article: Article,
         itemView: View, position: Int
     ) {
-        if(page == Const.KEY_NEWS_FRAGMENT){
-            doAsync {
-                NewsDB.getInstance(context!!).articleDao().insertArticle(article)
-                Log.e("HVV1312"," doasync")
-            }
-        }else {
+        if (page == Const.KEY_NEWS_FRAGMENT) {
+            insertValue(article)
+        } else {
             showPopupMenu(itemView, article, position)
+        }
+    }
+
+    private fun insertValue(article: Article?) {
+        if(article!=null) {
+            viewModel.insertArticle(article)
+            showError(getString(R.string.e_insert))
         }
     }
 
@@ -71,20 +78,18 @@ class NewsFragment : BaseFragment(), IOnNewsClickListener {
         adapter = ArticesAdapter()
         adapter.setListener(this)
         binding.adt = adapter
-        if(page == Const.KEY_NEWS_FRAGMENT) {
-            viewModel.article.observe(this, Observer {
-                adapter.setArticleList(it)
+        when (page) {
+            Const.KEY_NEWS_FRAGMENT -> viewModel.article.observe(this, Observer {
+                if(it!=null) adapter.setArticleList(it)
             })
-        }else if(page == Const.KEY_SAVES_FRAGMENT){
-            //doAsync {
-                Log.e("HVV1312","doAsync")
-                viewModel.getArticle().observe(viewLifecycleOwner, Observer {
-                    Log.e("HVV1312","${it.size}")
-                    adapter.setArticleList(it)
+            Const.KEY_SAVES_FRAGMENT -> {
+                viewModel.getArticle().observe(this, Observer {
+                    if(it!=null) adapter.setArticleList(it)
                 })
-            //}
-        }else{
+            }
+            else -> {
 
+            }
         }
         return binding.root
     }
@@ -123,10 +128,10 @@ class NewsFragment : BaseFragment(), IOnNewsClickListener {
         }
         popupMenu?.setOnMenuItemClickListener { item ->
             when (item.itemId) {
-                R.id.delete->{
+                R.id.delete -> {
                     deleteNews(article)
                 }
-                R.id.favorite->{
+                R.id.favorite -> {
                     favoriteNews(article)
                 }
             }
@@ -140,7 +145,17 @@ class NewsFragment : BaseFragment(), IOnNewsClickListener {
     }
 
     private fun deleteNews(article: Article?) {
+        // 2 TH
+        if (article != null) {
+            viewModel.deleteItem(article)
+            showError(getString(R.string.e_delete))
+        }
+    }
 
+    private fun showError(e:String){
+        viewModel.cannotAction.observe(this, Observer {
+            if (it) Toast.makeText(context,e,Toast.LENGTH_SHORT).show()
+        })
     }
 
     companion object {

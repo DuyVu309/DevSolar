@@ -16,15 +16,14 @@ class NewsRespository private constructor(private val articleDao: ArticleDao, pr
 
     suspend fun refreshSpecifyNews(tag:String) = requestSpecifyNews(tag)
 
-
-
-
     // Article DAO
     fun getArticles() = articleDao.getArticles()
 
     fun insertArticle(article: Article) = articleDao.insertArticle(article)
 
     fun deleteAll() = articleDao.deleteAll()
+
+    fun deleteItem(article: Article) = articleDao.deteleItem(article)
 
     companion object {
         private lateinit var instance: NewsRespository

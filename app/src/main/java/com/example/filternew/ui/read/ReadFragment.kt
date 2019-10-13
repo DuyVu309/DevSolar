@@ -27,11 +27,10 @@ class ReadFragment : BaseFragment() {
     private val viewModel by lazy {
         ViewModelProviders.of(
                 activity!!,
-                InjectorUtil.getSpecifyNewsFactory()
+                InjectorUtil.getSpecifyNewsFactory(context!!)
         ).get(NewsViewModel::class.java)
     }
     private var url = ""
-
 
     override fun onStart() {
         super.onStart()
