@@ -9,10 +9,13 @@ interface DataBaseHelper {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertOnlySingleArticles(articles: Articles)
 
+    @Query("SELECT * FROM Articles")
+    fun getAllArticles(): MutableList<Articles>
+
     @Query("SELECT * FROM Articles WHERE title LIKE '%' || :search || '%'")
     fun filterAllArticles(search : String): MutableList<Articles>
 
-    @Query("SELECT * FROM Articles WHERE isFavorite = 1 & title LIKE '%' || :search || '%'")
+    @Query("SELECT * FROM Articles WHERE isFavorite = 1 AND title LIKE '%' || :search || '%'")
     fun filterListFavoriteArticles(search : String): MutableList<Articles>
 
     @Query("SELECT * FROM Articles WHERE id = :id")

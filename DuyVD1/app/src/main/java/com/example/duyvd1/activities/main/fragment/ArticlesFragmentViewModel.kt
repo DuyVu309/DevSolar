@@ -41,10 +41,10 @@ class ArticlesFragmentViewModel(
 
     override fun getListDataSaved(textSearch: String) {
         if (mContext != null) {
-            mList.clear()
             ArticlesDbManager.newInstance(mContext!!)
                 .getListArticles(textSearch, object : ArticlesDbManager.OnGetDatListener {
                     override fun onGetDataSuccess(result: MutableList<Articles>) {
+                        mList.clear()
                         mList.addAll(result)
                         mView?.onGetDataSuccess()
                     }

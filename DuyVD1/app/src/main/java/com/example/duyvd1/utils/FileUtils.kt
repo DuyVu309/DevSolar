@@ -29,28 +29,10 @@ class FileUtils {
         override fun doInBackground(vararg params: String): String {
             val buffer = StringBuffer()
             try {
-                val document = Jsoup.connect(params[0]).get()
-
-                // Get document (HTML page) title
-                val title = document.title()
-                buffer.append("Title:$title\r\n")
-
-                // Get meta info
-                val metaElems = document.select("meta")
-                buffer.append("META DATA\r\n")
-                for (metaElem in metaElems) {
-                    val name = metaElem.attr("name")
-                    val content = metaElem.attr("content")
-                    buffer.append("name [$name] - content [$content] \r\n")
-                }
-
-                val topicList = document.select("h2.topic")
-                buffer.append("Topic list\r\n")
-                for (topic in topicList) {
-                    val data = topic.text()
-
-                    buffer.append("Data [$data] \r\n")
-                }
+                val doc = Jsoup.connect(params[0])
+                    .get()
+                val ele = doc.select("#mp-itn b a")
+                buffer.append( ele.toString())
 
             } catch (e: IOException) {
                 e.printStackTrace()

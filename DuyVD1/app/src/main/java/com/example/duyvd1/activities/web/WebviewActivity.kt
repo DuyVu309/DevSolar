@@ -18,6 +18,9 @@ import androidx.core.app.ActivityCompat
 import com.example.duyvd1.db.ArticlesDbManager
 import com.example.duyvd1.model.Articles
 import com.example.duyvd1.utils.FileUtils
+import android.webkit.WebChromeClient
+import android.annotation.SuppressLint
+
 
 class WebviewActivity : AppCompatActivity() {
 
@@ -34,18 +37,22 @@ class WebviewActivity : AppCompatActivity() {
     }
 
 
+    @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_webview)
-        dialog = CommonUtils.showLoadingDialog(this)
+        setContentView(com.example.duyvd1.R.layout.activity_webview)
         mArticles = intent.getParcelableExtra(AppConsant.KEY_EXTRA_DATA) ?: return
 
         if(CommonUtils.isNetworkAvailable(this)){
+            dialog = CommonUtils.showLoadingDialog(this)
             webview.loadUrl(mArticles?.url)
             webview.webViewClient = MyWebViewClient()
             if(mArticles?.id != null) download()
         }else if(mArticles?.urlParse != null){
-            webview.loadData(mArticles?.urlParse, "text/html; charset=utf-8", "UTF-8")
+            webview.webChromeClient = WebChromeClient()
+            webview.settings.javaScriptEnabled = true
+            webview.settings.domStorageEnabled = true
+            webview.loadData(mArticles?.urlParse, "text/html", "utf-8")
         }
     }
 
