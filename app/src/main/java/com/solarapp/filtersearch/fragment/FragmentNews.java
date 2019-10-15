@@ -1,5 +1,6 @@
 package com.solarapp.filtersearch.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -7,6 +8,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -81,6 +83,13 @@ public class FragmentNews extends Fragment {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 getDataFromApi(query);
+                //
+                if (getActivity() != null) {
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    if (imm != null) {
+                        imm.hideSoftInputFromWindow(searchView.getWindowToken(), 0);
+                    }
+                }
                 return true;
             }
 
@@ -106,6 +115,9 @@ public class FragmentNews extends Fragment {
                         binding.tvNoArticles.setVisibility(View.GONE);
                     }
                     newsAdapter.setArticlesList((ArrayList<ArticlesItem>) articlesItems);
+                    newsAdapter.onCallback(item -> {
+                        //download
+                    });
                     if (mLoadingDialog != null) mLoadingDialog.dismiss();
                 });
     }

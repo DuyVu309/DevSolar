@@ -16,10 +16,14 @@ import java.util.ArrayList;
 
 public class AdapterNews extends RecyclerView.Adapter<AdapterNews.ViewHolder> implements IItemNewsAdapterListener {
     private ArrayList<ArticlesItem> articlesItems;
-
+    private INewsCallback mCallback;
     public void setArticlesList(ArrayList<ArticlesItem> articlesItems) {
         this.articlesItems = articlesItems;
         notifyDataSetChanged();
+    }
+
+    public void onCallback(INewsCallback mCallback) {
+        this.mCallback = mCallback;
     }
 
     @NonNull
@@ -70,5 +74,8 @@ public class AdapterNews extends RecyclerView.Adapter<AdapterNews.ViewHolder> im
 //        }
     }
 
+    public interface INewsCallback {
+        void onDownloadNews(ArticlesItem item);
+    }
 
 }

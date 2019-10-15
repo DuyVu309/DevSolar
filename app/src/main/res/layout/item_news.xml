@@ -37,7 +37,7 @@
 
         <TextView
             android:id="@+id/tv_title_news"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
@@ -47,6 +47,7 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/color_blue"
             android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/iv_image_item"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Ghi toi 9 ban sau 5 tran: " />
@@ -61,6 +62,7 @@
             android:maxLines="1"
             android:text="@{model.description}"
             android:textColor="@color/color_black"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/tv_title_news"
             app:layout_constraintTop_toBottomOf="@id/tv_title_news"
             tools:text="afddgaagasg" />
