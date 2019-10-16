@@ -146,6 +146,8 @@ class FragmentNews : Fragment(), IGetData, NewsAdapter.INewsActionListener {
 
                 }.apply {
                     this.news = news
+                    setTextButtonFirst(R.string.save)
+                    setTextButtonSecond(R.string.favorite)
                     show()
                 }
             }
