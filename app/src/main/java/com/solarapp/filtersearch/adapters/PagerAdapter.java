@@ -5,8 +5,10 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.solarapp.filtersearch.fragment.FragmentNews;
+import com.solarapp.filtersearch.utils.Constaint;
 
 public class PagerAdapter extends FragmentPagerAdapter {
+
 
     public PagerAdapter(FragmentManager fm) {
         super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
@@ -18,19 +20,19 @@ public class PagerAdapter extends FragmentPagerAdapter {
         Fragment frag=null;
         switch (position){
             case 0:
-                frag = FragmentNews.newInstance();
+                frag = FragmentNews.newInstance(Constaint.TAB_NEWS);
                 break;
             case 1:
-                //frag = new FragmentTwo();
+                frag = FragmentNews.newInstance(Constaint.TAB_SAVED);
                 break;
             case 2:
-                //frag = new FragmentThree();
+                frag = FragmentNews.newInstance(Constaint.TAB_FAVORITE);
                 break;
         }
         if (frag != null) {
             return frag;
         } else {
-            return FragmentNews.newInstance();
+            return FragmentNews.newInstance(Constaint.TAB_NEWS);
         }
     }
 

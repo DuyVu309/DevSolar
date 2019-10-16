@@ -1,6 +1,6 @@
 package com.solarapp.filtersearch.interfaces;
 
-import com.solarapp.filtersearch.models.SearchResult;
+import com.solarapp.filtersearch.model.SearchResult;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

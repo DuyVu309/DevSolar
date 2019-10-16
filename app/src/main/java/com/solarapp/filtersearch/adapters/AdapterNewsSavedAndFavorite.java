@@ -9,17 +9,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.solarapp.filtersearch.R;
 import com.solarapp.filtersearch.data.News;
-import com.solarapp.filtersearch.databinding.ItemNewsBinding;
+import com.solarapp.filtersearch.databinding.ItemNewsSavedAndFavoriteBinding;
 import com.solarapp.filtersearch.interfaces.IItemNewsAdapterListener;
 import com.solarapp.filtersearch.model.ArticlesItem;
 
 import java.util.ArrayList;
 
-public class AdapterNews extends RecyclerView.Adapter<AdapterNews.ViewHolder> implements IItemNewsAdapterListener {
-    private ArrayList<ArticlesItem> articlesItems;
+public class AdapterNewsSavedAndFavorite extends RecyclerView.Adapter<AdapterNewsSavedAndFavorite.ViewHolder> implements IItemNewsAdapterListener {
+    private ArrayList<News> newsArrayList;
     private INewsCallback mCallback;
-    public void setArticlesList(ArrayList<ArticlesItem> articlesItems) {
-        this.articlesItems = articlesItems;
+
+
+    public void setNewsArrayList(ArrayList<News> newsArrayList) {
+        this.newsArrayList = newsArrayList;
         notifyDataSetChanged();
     }
 
@@ -31,30 +33,31 @@ public class AdapterNews extends RecyclerView.Adapter<AdapterNews.ViewHolder> im
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        ItemNewsBinding binding = DataBindingUtil.inflate(
+        ItemNewsSavedAndFavoriteBinding binding = DataBindingUtil.inflate(
                 LayoutInflater.from(parent.getContext()),
-                R.layout.item_news, parent, false);
+                R.layout.item_news_saved_and_favorite, parent, false);
 
         return new ViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        ArticlesItem dataModel = articlesItems.get(position);
+        News dataModel = newsArrayList.get(position);
 //        holder.bind(dataModel);
-        holder.itemNewsBinding.setModel(dataModel);
-        holder.itemNewsBinding.setItemListener(this);
-        holder.itemNewsBinding.itemNews.setOnLongClickListener(view -> {
-            if (mCallback != null)
-                mCallback.onDownloadNews(dataModel);
+        holder.itemBinding.setModel(dataModel);
+        holder.itemBinding.setItemListener(this);
+        holder.itemBinding.itemNews.setOnLongClickListener(view -> {
+            //show menu
+
+
             return true;
         });
     }
 
     @Override
     public int getItemCount() {
-        if (articlesItems != null) {
-            return articlesItems.size();
+        if (newsArrayList != null) {
+            return newsArrayList.size();
         } else {
             return 0;
         }
@@ -62,21 +65,28 @@ public class AdapterNews extends RecyclerView.Adapter<AdapterNews.ViewHolder> im
 
     @Override
     public void onItemNewsClick(ArticlesItem data) {
-        //web view
+        //not use
     }
 
     @Override
     public void onItemNewsSavedAndFavorite(News news) {
-        //not use
+        //web view
     }
 
 
-    class ViewHolder extends RecyclerView.ViewHolder {
-        private ItemNewsBinding itemNewsBinding;
+    public interface INewsCallback {
+        void onSaveNews(News news);
 
-        ViewHolder(ItemNewsBinding itemNewsBinding) {
-            super(itemNewsBinding.getRoot());
-            this.itemNewsBinding = itemNewsBinding;
+        void onDeleteNews(News news);
+
+    }
+
+    class ViewHolder extends RecyclerView.ViewHolder {
+        private ItemNewsSavedAndFavoriteBinding itemBinding;
+
+        ViewHolder(ItemNewsSavedAndFavoriteBinding itemBinding) {
+            super(itemBinding.getRoot());
+            this.itemBinding = itemBinding;
         }
 
 //        void bind(Object obj) {
@@ -84,10 +94,4 @@ public class AdapterNews extends RecyclerView.Adapter<AdapterNews.ViewHolder> im
 //            itemNewsBinding.executePendingBindings();
 //        }
     }
-
-    public interface INewsCallback {
-        void onDownloadNews(ArticlesItem item);
-
-    }
-
 }

@@ -21,23 +21,28 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.solarapp.filtersearch.R;
 import com.solarapp.filtersearch.adapters.AdapterNews;
+import com.solarapp.filtersearch.adapters.AdapterNewsSavedAndFavorite;
+import com.solarapp.filtersearch.data.News;
+import com.solarapp.filtersearch.data.viewmodels.NewsViewModel;
 import com.solarapp.filtersearch.databinding.FragmentNewsBinding;
 import com.solarapp.filtersearch.dialog.DialogLoading;
-import com.solarapp.filtersearch.models.ArticlesItem;
-import com.solarapp.filtersearch.viewmodels.NewsViewModel;
+import com.solarapp.filtersearch.model.ArticlesItem;
+import com.solarapp.filtersearch.utils.Constaint;
 
 import java.util.ArrayList;
+
 
 public class FragmentNews extends Fragment {
     private DialogLoading mLoadingDialog;
     private NewsViewModel newsViewModel;
     private AdapterNews newsAdapter;
-
+    private static final String KEY_ARGS = "Type";
+    private AdapterNewsSavedAndFavorite adapterNewsSavedAndFavorite;
     private FragmentNewsBinding binding;
 
-
-    public static FragmentNews newInstance() {
+    public static FragmentNews newInstance(String typeFragment) {
         Bundle args = new Bundle();
+        args.putString(KEY_ARGS, typeFragment);
         FragmentNews fragment = new FragmentNews();
         fragment.setArguments(args);
         return fragment;
@@ -67,9 +72,53 @@ public class FragmentNews extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(true);
 
-        newsViewModel = ViewModelProviders.of(this).get(NewsViewModel.class);
         newsAdapter = new AdapterNews();
+        adapterNewsSavedAndFavorite = new AdapterNewsSavedAndFavorite();
         recyclerView.setAdapter(newsAdapter);
+
+        newsViewModel = ViewModelProviders.of(this).get(NewsViewModel.class);
+        if (getArguments() != null) {
+            String typeFragmnent = getArguments().getString(KEY_ARGS);
+            if (typeFragmnent != null && !typeFragmnent.equals(Constaint.TAB_NEWS)) {
+                recyclerView.setAdapter(adapterNewsSavedAndFavorite);
+
+                newsViewModel.getNewsSavedAndFavorite().observe(this, news -> {
+
+                    if (news.size() > 0) {
+                        binding.tvNoArticles.setVisibility(View.GONE);
+                    }
+                    if (typeFragmnent.equals(Constaint.TAB_SAVED)) {
+                        adapterNewsSavedAndFavorite.setNewsArrayList((ArrayList<News>) news);
+                    } else {
+                        ArrayList<News> newsFavorite = new ArrayList<>();
+                        for (News i : news) {
+                            if (i.favorite) {
+                                newsFavorite.add(i);
+                            }
+                        }
+                        adapterNewsSavedAndFavorite.setNewsArrayList(newsFavorite);
+                    }
+
+                    adapterNewsSavedAndFavorite.onCallback(new AdapterNewsSavedAndFavorite.INewsCallback() {
+                        @Override
+                        public void onSaveNews(News news) {
+
+                        }
+
+                        @Override
+                        public void onDeleteNews(News news) {
+
+                        }
+                    });
+
+                    if (mLoadingDialog != null)
+                        mLoadingDialog.dismiss();
+
+                });
+
+
+            }
+        }
     }
 
 
@@ -113,11 +162,13 @@ public class FragmentNews extends Fragment {
                 articlesItems -> {
                     if (articlesItems.size() > 0) {
                         binding.tvNoArticles.setVisibility(View.GONE);
+                    } else {
+                        newsAdapter.setArticlesList((ArrayList<ArticlesItem>) articlesItems);
+                        newsAdapter.onCallback(item -> {
+                            //download
+
+                        });
                     }
-                    newsAdapter.setArticlesList((ArrayList<ArticlesItem>) articlesItems);
-                    newsAdapter.onCallback(item -> {
-                        //download
-                    });
                     if (mLoadingDialog != null) mLoadingDialog.dismiss();
                 });
     }

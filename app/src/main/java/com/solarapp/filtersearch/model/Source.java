@@ -1,4 +1,4 @@
-package com.solarapp.filtersearch.models;
+package com.solarapp.filtersearch.model;
 
 public class Source{
 	private String name;

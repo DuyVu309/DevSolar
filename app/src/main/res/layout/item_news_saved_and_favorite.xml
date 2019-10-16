@@ -7,7 +7,7 @@
 
         <variable
             name="model"
-            type="com.solarapp.filtersearch.model.ArticlesItem" />
+            type="com.solarapp.filtersearch.data.News" />
 
         <variable
             name="itemListener"
@@ -22,7 +22,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:background="@android:color/white"
-        android:onClick="@{() -> itemListener.onItemNewsClick(model)}"
+        android:onClick="@{() -> itemListener.onItemNewsSavedAndFavorite(news)}"
         android:paddingTop="8dp"
         android:paddingBottom="8dp">
 
@@ -33,7 +33,7 @@
             android:layout_marginStart="8dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:profileImage="@{model.urlToImage}" />
+            app:profileImage="@{model.image}" />
 
         <TextView
             android:id="@+id/tv_title_news"
@@ -72,7 +72,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:maxLines="1"
-            android:text="@{model.publishedAt}"
+            android:text="@{model.date}"
             android:textColor="@color/color_black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
