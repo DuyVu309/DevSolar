@@ -1,10 +1,11 @@
 package com.team.veza.googlenew.view.pager
 
+import androidx.lifecycle.LiveData
 import com.team.veza.googlenew.model.News
 
 interface IGetData {
-    fun startGetData(key:String)
+    fun startGetData(frmId:Int,key:String)
     fun onGetDataStarted()
-    fun onGetDataCompleted(list: List<News>)
+    fun onGetDataCompleted()
     fun onGetDataFaild()
 }

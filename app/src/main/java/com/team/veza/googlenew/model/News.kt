@@ -9,46 +9,53 @@ import com.team.veza.googlenew.database.SourceConverter
 class News{
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "countId")
-    var countId = 0
+    var countId:Int = 0
     @ColumnInfo(name = "source")
     @TypeConverters(SourceConverter::class)
     @SerializedName("source")
     @Expose
     var source = Source()
+
     @ColumnInfo(name = "author")
     @SerializedName("author")
     @Expose
-    var author = ""
+    var author:String? = ""
+
     @ColumnInfo(name = "title")
     @SerializedName("title")
     @Expose
-    var title = ""
+    var title:String? = ""
+
     @ColumnInfo(name = "description")
     @SerializedName("description")
     @Expose
-    var description = ""
+    var description:String = ""
+
     @ColumnInfo(name = "url")
     @SerializedName("url")
     @Expose
-    var url = ""
+    var url:String = ""
+
     @ColumnInfo(name = "urlToImage")
     @SerializedName("urlToImage")
     @Expose
-    var urlToImage = ""
+    var urlToImage:String = ""
+
     @ColumnInfo(name = "publishedAt")
     @SerializedName("publishedAt")
     @Expose
-    var publishedAt = ""
+
+    var publishedAt:String? = ""
     @ColumnInfo(name = "content")
     @SerializedName("content")
     @Expose
-    var content = ""
+    var content:String = ""
 
     @ColumnInfo(name = "isFavorite")
-    var isFavorite = false
+    var isFavorite:Boolean = false
 
     @ColumnInfo(name = "savedPath")
-    var savedPath = ""
+    var savedPath:String = ""
 
     @Ignore
     constructor(
@@ -69,6 +76,11 @@ class News{
         this.urlToImage = urlToImage
         this.publishedAt = publishedAt
         this.content = content
+    }
+
+    @Ignore
+    override fun toString(): String {
+        return "NewsInfo [Title: $title]"
     }
 
     constructor()

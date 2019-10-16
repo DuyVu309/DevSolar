@@ -3,8 +3,12 @@ package com.team.veza.googlenew.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.team.veza.googlenew.model.News
+import com.team.veza.googlenew.model.repo.NewsRepository
 
 class NewsViewModel : ViewModel(){
+
+    private val TAG = "NVT"+javaClass.simpleName
+
     var isShowLoading = MutableLiveData<Boolean>().apply {
         value = false
     }
@@ -12,29 +16,22 @@ class NewsViewModel : ViewModel(){
     var textSearch = MutableLiveData<String>().apply {
         value = ""
     }
-    var listNews = MutableLiveData<List<News>>().apply {
-        value = ArrayList()
-    }
-    var listSaved = MutableLiveData<List<News>>().apply {
-        value = ArrayList()
-    }
-    var listFavorite = MutableLiveData<List<News>>().apply {
-        value = ArrayList()
-    }
 
-    val listData = ArrayList<MutableLiveData<List<News>>>().apply {
-        add(listNews)
-        add(listSaved)
-        add(listFavorite)
-    }
-
-    fun setListValueById(id:Int,list: List<News>){
-        listData[id].value = list
-    }
-
-    fun getListSize(frmId:Int) = listData[frmId].value?.size?:0
+    fun getListData(id:Int) = NewsRepository.listData[id]
 
     fun setLoading(isShown: Boolean){
         isShowLoading.value = isShown
+    }
+
+    fun dbInsert(news: News){
+        NewsRepository.dbInsert(news)
+    }
+
+    fun dbDelete(news:News){
+        NewsRepository.dbDelete(news)
+    }
+
+    fun dbUpdate(news:News){
+        NewsRepository.dbUpdate(news)
     }
 }

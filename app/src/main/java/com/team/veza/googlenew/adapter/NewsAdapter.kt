@@ -22,7 +22,7 @@ class NewsAdapter : ListAdapter<News,NewsAdapter.NewsHolder>(DIFF){
     companion object{
         private val DIFF = object : DiffUtil.ItemCallback<News>(){
             override fun areItemsTheSame(oldItem: News, newItem: News): Boolean {
-                return oldItem.url == newItem.url
+                return oldItem.countId == newItem.countId
             }
 
             override fun areContentsTheSame(oldItem: News, newItem: News): Boolean {

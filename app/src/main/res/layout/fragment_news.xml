@@ -24,6 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
         <TextView
+            android:background="@color/white"
             android:visibility="@{isEmpty?View.VISIBLE:View.GONE}"
             android:gravity="center"
             android:text="@string/empty"

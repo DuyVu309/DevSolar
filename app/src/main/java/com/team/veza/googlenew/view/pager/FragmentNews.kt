@@ -2,15 +2,16 @@ package com.team.veza.googlenew.view.pager
 
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Point
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.BindingAdapter
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 
@@ -19,16 +20,15 @@ import com.team.veza.googlenew.adapter.NewsAdapter
 import com.team.veza.googlenew.databinding.FragmentNewsBinding
 import com.team.veza.googlenew.model.News
 import com.team.veza.googlenew.model.repo.NewsRepository
-import com.team.veza.googlenew.utils.Utility
+import com.team.veza.googlenew.view.DetailActivity
 import com.team.veza.googlenew.view.MainActivity
 import com.team.veza.googlenew.view.dialog.DialogNews
 import com.team.veza.googlenew.viewmodel.NewsViewModel
-import kotlinx.android.synthetic.main.fragment_news.*
 
 /**
  * A simple [Fragment] subclass.
  */
-class FragmentNews : Fragment(), IGetData,NewsAdapter.INewsActionListener {
+class FragmentNews : Fragment(), IGetData, NewsAdapter.INewsActionListener {
 
     private val newsAdapter = NewsAdapter()
 
@@ -36,13 +36,14 @@ class FragmentNews : Fragment(), IGetData,NewsAdapter.INewsActionListener {
         val ID_NEWS = 0
         val ID_SAVED = 1
         val ID_FAVORITE = 2
+        const val TAG = "NVTFragmentNews"
     }
 
     var frmId = 0
     private lateinit var viewModel: NewsViewModel
     private lateinit var activity: MainActivity
-    private lateinit var listData: MutableLiveData<List<News>>
-    private var binding:FragmentNewsBinding?=null
+    private lateinit var listData: LiveData<List<News>>
+    private var binding: FragmentNewsBinding? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,6 +57,7 @@ class FragmentNews : Fragment(), IGetData,NewsAdapter.INewsActionListener {
         super.onViewCreated(view, savedInstanceState)
         binding = DataBindingUtil.bind(view)
         binding?.viewModel = viewModel
+        binding?.lifecycleOwner = this
         binding?.frmId = frmId
         initView()
     }
@@ -67,62 +69,79 @@ class FragmentNews : Fragment(), IGetData,NewsAdapter.INewsActionListener {
     }
 
     private fun initView() {
-        rv_news.layoutManager = LinearLayoutManager(activity)
-        rv_news.setHasFixedSize(true)
-        rv_news.adapter = newsAdapter
+
+        binding?.rvNews?.layoutManager = LinearLayoutManager(activity)
+        binding?.rvNews?.setHasFixedSize(true)
+        binding?.rvNews?.adapter = newsAdapter
         newsAdapter.setActionListener(this)
         initData()
     }
 
     private fun initData() {
-        listData = viewModel.listData[frmId]
+        listData = viewModel.getListData(frmId)
+
         listData.observe(viewLifecycleOwner, Observer {
             newsAdapter.submitList(it)
             binding?.isEmpty = it.isEmpty()
         })
-        viewModel.textSearch.observe(viewLifecycleOwner, Observer {
-            startGetData(it)
-        })
+
+        if (frmId == ID_NEWS)
+            viewModel.textSearch.observe(viewLifecycleOwner, Observer {
+                if(it.isNotEmpty()) {
+                    startGetData(viewModel.currentTabFocus, it)
+                    binding?.isEmpty = false
+                }else{
+                    binding?.isEmpty = true
+                }
+            })
     }
 
-    override fun startGetData(key:String) {
-        NewsRepository.getData(viewModel.currentTabFocus, this, key)
+    override fun startGetData(frmId: Int, key: String) {
+        NewsRepository.getData(frmId, this, key)
     }
 
     override fun onGetDataStarted() {
+        if (frmId != viewModel.currentTabFocus)
+            return
         viewModel.setLoading(true)
     }
 
-    override fun onGetDataCompleted(list: List<News>) {
-        viewModel.setListValueById(viewModel.currentTabFocus, list)
+    override fun onGetDataCompleted() {
+        if (frmId != viewModel.currentTabFocus)
+            return
         viewModel.setLoading(false)
     }
 
     override fun onGetDataFaild() {
         //Utility.showMessage(R.string.error)
-        viewModel.setListValueById(viewModel.currentTabFocus, ArrayList())
+        if (frmId != viewModel.currentTabFocus)
+            return
         viewModel.setLoading(false)
     }
 
     override fun onClickItem(v: View, news: News) {
-        Utility.showMessage("Clicked $news")
+        activity.startActivity(Intent(activity,DetailActivity::class.java).apply {
+            putExtra(DetailActivity.EXTRA_URL,news.url)
+        })
     }
+
 
     override fun onLongClickItem(v: View, news: News): Boolean {
         val location = IntArray(2)
         v.getLocationOnScreen(location)
         val x = location[0]
         val y = location[1]
-        when(frmId){
-            ID_NEWS->{
-                object : DialogNews(activity, Point(x,y)){
+        when (frmId) {
+            ID_NEWS -> {
+                object : DialogNews(activity, Point(x, y),frmId) {
                     override fun btnSecondClick(news: News) {
                         news.isFavorite = true
-                        NewsRepository.dbInsert(news)
+                        viewModel.dbInsert(news)
                     }
 
                     override fun btnFirstClick(news: News) {
-                        NewsRepository.dbInsert(news)
+                        Log.e(TAG,"News Added: $news")
+                        viewModel.dbInsert(news)
                     }
 
                 }.apply {
@@ -130,15 +149,15 @@ class FragmentNews : Fragment(), IGetData,NewsAdapter.INewsActionListener {
                     show()
                 }
             }
-            ID_SAVED->{
-                object : DialogNews(activity, Point(x,y)){
+            ID_SAVED -> {
+                object : DialogNews(activity, Point(x, y),frmId) {
                     override fun btnSecondClick(news: News) {
-                        NewsRepository.dbDelelte(news)
+                        viewModel.dbDelete(news)
                     }
 
                     override fun btnFirstClick(news: News) {
                         news.isFavorite = true
-                        NewsRepository.dbUpdate(news)
+                        viewModel.dbUpdate(news)
                     }
 
                 }.apply {
@@ -148,14 +167,14 @@ class FragmentNews : Fragment(), IGetData,NewsAdapter.INewsActionListener {
                     show()
                 }
             }
-            ID_FAVORITE->{
-                object : DialogNews(activity, Point(x,y)){
+            ID_FAVORITE -> {
+                object : DialogNews(activity, Point(x, y),frmId) {
                     override fun btnSecondClick(news: News) {
 
                     }
 
                     override fun btnFirstClick(news: News) {
-                        NewsRepository.dbUpdate(news.apply { isFavorite = false })
+                        viewModel.dbUpdate(news.apply { isFavorite = false })
                     }
 
                 }.apply {

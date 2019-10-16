@@ -7,7 +7,6 @@ import android.graphics.Point
 import android.graphics.drawable.ColorDrawable
 import android.view.Gravity
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import com.team.veza.googlenew.R
@@ -20,7 +19,11 @@ abstract class DialogNews {
     var btnSecond:TextView
 
     @SuppressLint("InflateParams")
-    constructor(context: Context,pointShow:Point){
+    constructor(
+        context: Context,
+        pointShow: Point,
+        frmId: Int
+    ){
         val builder = AlertDialog.Builder(context)
         val v = LayoutInflater.from(context).inflate(R.layout.dialog_news,null)
         btnFirst = v.findViewById<TextView>(R.id.btnSave)

@@ -10,10 +10,10 @@ class Source{
     @ColumnInfo(name = "id")
     @SerializedName("id")
     @Expose
-    var id = ""
+    var id:String = ""
     @SerializedName("name")
     @Expose
-    var name =""
+    var name:String =""
 
     override fun toString(): String {
         return "{\"id\":\"$id\",\"name\":\"$name\"}"

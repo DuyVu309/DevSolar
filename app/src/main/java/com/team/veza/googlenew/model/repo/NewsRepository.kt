@@ -1,18 +1,15 @@
 package com.team.veza.googlenew.model.repo
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.team.veza.googlenew.database.NewsDB
-import com.team.veza.googlenew.database.NewsDao
 import com.team.veza.googlenew.model.News
 import com.team.veza.googlenew.model.NewsResult
 import com.team.veza.googlenew.utils.retrofit.RetrofitClient
 import com.team.veza.googlenew.view.pager.FragmentNews
 import com.team.veza.googlenew.view.pager.IGetData
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -23,6 +20,21 @@ object NewsRepository {
     val RESULT_SUCCESSFUL = 1
     val newsDao = NewsDB.getInstance().newsDao()
 
+//    var listNews: LiveData<List<News>> = MutableLiveData<List<News>>().apply {
+//        value = ArrayList()
+//    }
+
+    var listNews = MutableLiveData<List<News>>()
+
+    var listSaved: LiveData<List<News>> = newsDao.get()
+    var listFavorite: LiveData<List<News>> = newsDao.getFavorite()
+
+    val listData = ArrayList<LiveData<List<News>>>().apply {
+        add(listNews)
+        add(listSaved)
+        add(listFavorite)
+    }
+
     fun getData(pagerId: Int, getDataListener: IGetData, key: String = "") {
         when (pagerId) {
             FragmentNews.ID_NEWS -> {
@@ -32,11 +44,12 @@ object NewsRepository {
                         call: Call<NewsResult>?,
                         response: Response<NewsResult>?
                     ) {
-                        Log.e(TAG, "Successful")
                         if (response?.isSuccessful == true) {
-                            getDataListener.onGetDataCompleted(
-                                response.body().listNews ?: ArrayList()
-                            )
+                            val listResult = response.body().listNews ?: ArrayList()
+                            Log.e(TAG, "Successful with Result: ${listResult[0].urlToImage}")
+                            getDataListener.onGetDataCompleted()
+                            listNews.value = listResult
+
                         } else {
                             getDataListener.onGetDataFaild()
                         }
@@ -49,28 +62,31 @@ object NewsRepository {
 
                 })
             }
-            FragmentNews.ID_SAVED -> {
-                getDataListener.onGetDataStarted()
-                GlobalScope.launch(Dispatchers.IO) {
-                    val list = newsDao.get("%$key%").value ?: ArrayList()
-                    withContext(Dispatchers.Main) {
-                        getDataListener.onGetDataCompleted(list)
-                    }
-                }
-            }
-            FragmentNews.ID_FAVORITE -> {
-                getDataListener.onGetDataStarted()
-                GlobalScope.launch(Dispatchers.IO) {
-                    val list = newsDao.getFavorite("%$key%").value ?: ArrayList()
-                    withContext(Dispatchers.Main) {
-                        getDataListener.onGetDataCompleted(list)
-                    }
-                }
-            }
+//            FragmentNews.ID_SAVED -> {
+//                getDataListener.onGetDataStarted()
+//                getDataListener.onGetDataCompleted(newsDao.get())
+////                GlobalScope.launch(Dispatchers.IO) {
+////                    withContext(Dispatchers.Main) {
+////                    }
+////                }
+//            }
+//            FragmentNews.ID_FAVORITE -> {
+//                getDataListener.onGetDataStarted()
+//                getDataListener.onGetDataCompleted(newsDao.getFavorite(""))
+////                GlobalScope.launch(Dispatchers.IO) {
+////                    withContext(Dispatchers.Main) {
+////                        getDataListener.onGetDataCompleted(newsDao.getFavorite(""))
+////                    }
+////                }
+//            }
         }
     }
 
-    fun dbInsert(news: News) = GlobalScope.launch(Dispatchers.IO) { newsDao.insert(news) }
-    fun dbDelelte(news: News) = GlobalScope.launch(Dispatchers.IO) { newsDao.delete(news) }
-    fun dbUpdate(news: News) = GlobalScope.launch(Dispatchers.IO) { newsDao.update(news) }
+    fun dbInsert(news: News) = GlobalScope.launch {
+        val id = newsDao.insert(news)
+        Log.e(TAG, "Added Id: $id,List db = ${newsDao.get().value}")
+    }
+
+    fun dbDelete(news: News) = GlobalScope.launch { newsDao.delete(news) }
+    fun dbUpdate(news: News) = GlobalScope.launch { newsDao.update(news) }
 }

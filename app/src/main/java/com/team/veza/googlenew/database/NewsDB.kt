@@ -7,7 +7,7 @@ import com.team.veza.googlenew.model.News
 import com.team.veza.googlenew.model.Source
 import com.team.veza.googlenew.utils.App
 
-@Database(entities = arrayOf(News::class), version = 1)
+@Database(entities = arrayOf(News::class), version = 2)
 abstract class NewsDB:RoomDatabase(){
     abstract fun newsDao():NewsDao
     companion object{
