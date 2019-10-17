@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable name="item" type="com.nor.filternews.model.News"/>
+        <variable name="listener" type="com.nor.filternews.ui.main.fragments.NewsItemListener"/>
+    </data>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:orientation="horizontal"
+                  android:layout_width="match_parent"
+                  android:padding="10dp"
+                  android:onClick="@{v -> listener.onClickItem(item)}"
+                  android:gravity="center_vertical"
+                  android:layout_height="wrap_content">
+        <ImageView
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                app:setImageUrl="@{item}"/>
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_marginLeft="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            <TextView
+                    android:text="@{item.title}"
+                    android:textStyle="bold"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            <TextView
+                    android:text="@{item.description}"
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            <TextView
+                    android:text="@{item.publishedAt}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+        </LinearLayout>
+    </LinearLayout>
+</layout>

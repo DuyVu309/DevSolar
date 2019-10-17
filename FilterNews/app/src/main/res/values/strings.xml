@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">FilterNews</string>
+    <string name="title_news">News</string>
+    <string name="title_saved">Saved</string>
+    <string name="api_key">f70e06a71e524dfa86dbfcf7ca38e62f</string>
+</resources>
