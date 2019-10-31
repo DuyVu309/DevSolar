@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+                name="position"
+                type="java.lang.Integer" />
+        <variable
+                name="item"
+                type="com.nor.mp3music.models.Song" />
+
+        <variable
+                name="isPlaying"
+                type="java.lang.Boolean" />
+        <variable
+                name="service"
+                type="com.nor.mp3music.service.MP3Service" />
+    </data>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp"
+            android:orientation="vertical">
+        <com.nor.mp3music.views.MP3TextView
+                android:text="@{item.title}"
+                android:textColor="@color/colorAccent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        <SeekBar
+                android:progress="@{position}"
+                android:max="@{item.duration}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        <com.nor.mp3music.views.MP3TextView
+                app:duration="@{item.duration}"
+                app:position="@{position}"
+                android:gravity="right"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+            <com.nor.mp3music.views.MP3ImageView
+                    android:src="@drawable/ic_prev"
+                    android:tint="@color/colorAccent"
+                    android:padding="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            <com.nor.mp3music.views.MP3ImageView
+                    android:src="@{isPlaying ? @drawable/ic_pause : @drawable/ic_play}"
+                    android:tint="@color/colorAccent"
+                    android:padding="10dp"
+                    android:onClick="@{v -> isPlaying ? service.pause() : service.start()}"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"/>
+            <com.nor.mp3music.views.MP3ImageView
+                    android:src="@drawable/ic_next"
+                    android:tint="@color/colorAccent"
+                    android:padding="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            <com.nor.mp3music.views.MP3ImageView
+                    android:src="@drawable/ic_close_black_24dp"
+                    android:layout_marginLeft="32dp"
+                    android:tint="@color/colorAccent"
+                    android:padding="10dp"
+                    android:onClick="@{v -> service.stop()}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+        </LinearLayout>
+    </LinearLayout>
+</layout>

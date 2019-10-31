@@ -10,9 +10,14 @@
             tools:context=".ui.MainActivity">
         <FrameLayout
                 android:id="@+id/panel"
-                android:layout_above="@+id/nav_bottom"
+                android:layout_above="@+id/play_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
+        <com.nor.mp3music.views.MP3PlayView
+                android:id="@+id/play_view"
+                android:layout_above="@+id/nav_bottom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
         <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:id="@+id/nav_bottom"
                 android:background="#fff"

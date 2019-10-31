@@ -6,6 +6,7 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
+import com.nor.mp3music.BR
 import com.nor.mp3music.models.ModelBase
 
 class AdapterBase<T: ModelBase>(private val inflater: LayoutInflater,
@@ -20,6 +21,8 @@ class AdapterBase<T: ModelBase>(private val inflater: LayoutInflater,
         notifyDataSetChanged()
     }
 
+    fun getData() = data
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderBase {
          val binding = DataBindingUtil.inflate<ViewDataBinding>(
              inflater, resLayout, parent, false
@@ -33,8 +36,8 @@ class AdapterBase<T: ModelBase>(private val inflater: LayoutInflater,
 
     override fun onBindViewHolder(holder: ViewHolderBase, position: Int) {
         val item = data?.get(position)
-//        holder.binding.setVariable(BR.item, item)
-//        holder.binding.setVariable(BR.listener, listener)
+        holder.binding.setVariable(BR.item, item)
+        holder.binding.setVariable(BR.listener, listener)
         holder.binding.executePendingBindings()
     }
 
