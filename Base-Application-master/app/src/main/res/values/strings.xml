@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">BaseApplication</string>
+    <string name="add_fragment">Add Fragment</string>
+</resources>
