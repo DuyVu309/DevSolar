@@ -1,6 +1,5 @@
 package com.example.duyvd1.activities.main
 
-import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -12,8 +11,6 @@ import com.example.duyvd1.R
 import com.example.duyvd1.activities.main.adapter.MainPagerAdapter
 import com.example.duyvd1.activities.main.fragment.ArticlesFragment
 import com.example.duyvd1.databinding.ActivityMainBinding
-import com.example.duyvd1.db.ArticlesDbManager
-import com.example.duyvd1.model.Articles
 import com.example.duyvd1.utils.AppConsant
 import com.google.android.material.tabs.TabLayout
 
